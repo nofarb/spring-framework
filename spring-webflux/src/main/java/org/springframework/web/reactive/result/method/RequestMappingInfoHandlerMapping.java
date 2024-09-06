@@ -416,7 +416,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 			}
 			else {
 				Set<HttpMethod> result = new LinkedHashSet<>(declaredMethods);
-				if (result.contains(HttpMethod.GET)) {
+				if (result.contains(HttpMethod.GET) || result.contains(HttpMethod.QUERY)) {
 					result.add(HttpMethod.HEAD);
 				}
 				result.add(HttpMethod.OPTIONS);
