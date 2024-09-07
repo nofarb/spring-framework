@@ -122,8 +122,13 @@ configure([rootProject] + javaProjects) { project ->
 	] as String[]
 }
 
-apply plugin: 'io.harness.gradle-cache'
 
+}
+configure(moduleProjects) { project ->
+	apply from: "${rootDir}/gradle/spring-module.gradle"
+}
+
+apply plugin: 'io.harness.gradle-cache'
 
 buildCache {
     local {
@@ -134,8 +139,4 @@ buildCache {
     remote(io.harness.Cache) {
         push = System.getenv('CI') == "true"
     }
-}
-
-configure(moduleProjects) { project ->
-	apply from: "${rootDir}/gradle/spring-module.gradle"
 }
