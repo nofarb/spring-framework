@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.harness:gradle-cache:0.0.4'
+    }
+}
+
 plugins {
 	id "com.gradle.develocity" version "3.17.2"
 	id "io.spring.ge.conventions" version "0.0.17"
@@ -52,4 +61,17 @@ settings.gradle.projectsLoaded {
 			}
 		}
 	}
+}
+
+apply plugin: 'io.harness.gradle-cache'
+
+buildCache {
+    local {
+        // Local build cache is dangerous as it might produce inconsistent results
+        // in case developer modifies files while the build is running
+        enabled = false
+    }
+    remote(io.harness.Cache) {
+        push = System.getenv('CI') == "true"
+    }
 }
