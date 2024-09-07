@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.harness:gradle-cache:0.0.4'
+    }
+}
+
 plugins {
 	id 'io.freefair.aspectj' version '8.4' apply false
 	// kotlinVersion is managed in gradle.properties
@@ -111,6 +120,20 @@ configure([rootProject] + javaProjects) { project ->
 			// JakartaEE equivalents in the jakarta.annotation package.
 			//"https://www.javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/"
 	] as String[]
+}
+
+apply plugin: 'io.harness.gradle-cache'
+
+
+buildCache {
+    local {
+        // Local build cache is dangerous as it might produce inconsistent results
+        // in case developer modifies files while the build is running
+        enabled = false
+    }
+    remote(io.harness.Cache) {
+        push = System.getenv('CI') == "true"
+    }
 }
 
 configure(moduleProjects) { project ->
